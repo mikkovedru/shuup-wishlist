@@ -32,14 +32,14 @@ class WishlistForm(forms.ModelForm):
             try:
                 shop_product = ShopProduct.objects.get(pk=self.shop_product_id)
             except ShopProduct.DoesNotExist as e:
-                errors.append(ValidationError(_('Invalid shop product.'), code="invalid-shop-product"))
+                errors.append(ValidationError(_("Invalid shop product."), code="invalid-shop-product"))
 
                 if has_installed("raven.contrib.django.raven_compat"):
                     from raven.contrib.django.raven_compat.models import client
                     client.captureException()
 
             if shop_product.shop != self.shop:
-                errors.append(ValidationError(_('Invalid shop.'), code="invalid-shop"))
+                errors.append(ValidationError(_("Invalid shop."), code="invalid-shop"))
 
             errors.extend(list(shop_product.get_visibility_errors(self.customer)))
             for error in errors:

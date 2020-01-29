@@ -139,10 +139,10 @@ class WishlistProductDeleteView(DeleteView):
 def add_product_to_wishlist(request, wishlist_id, shop_product_id):
     response = {'created': False}
     if request.method != 'POST':
-        return JsonResponse({'err': 'invalid request'}, status=405)
+        return JsonResponse({'err': 'Error! Invalid request.'}, status=405)
 
     if not getattr(request, 'customer', None):
-        return JsonResponse({'err': 'unauthorized request'}, status=403)
+        return JsonResponse({'err': 'Error! Unauthorized request.'}, status=403)
 
     if wishlist_id != 'default':
         wishlist = Wishlist.objects.filter(customer=request.customer, id=int(wishlist_id)).first()
@@ -155,7 +155,7 @@ def add_product_to_wishlist(request, wishlist_id, shop_product_id):
             wishlist.products.add(shop_product_id)
         response['product_name'] = wishlist.products.get(id=shop_product_id).get_name()
     elif wishlist_id == 'default':
-        return JsonResponse({'err': 'no wishlists exist'}, status=200)
+        return JsonResponse({'err': 'Error! No wishlists exist.'}, status=200)
     else:
-        return JsonResponse({'err': 'invalid wishlist'}, status=400)
+        return JsonResponse({'err': 'Error! Invalid wishlist.'}, status=400)
     return JsonResponse(response)
